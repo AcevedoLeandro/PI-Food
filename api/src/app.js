@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
-
+const { Diet } = require('../src/db.js')
 require('./db.js');
 
 const server = express();
@@ -21,6 +21,18 @@ server.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   next();
 });
+
+//initial diets
+server.use(async (req, res, next) => {
+  let initialDiets = ['gluten free', 'ketogenic', 'vegetarian', 'lacto-vegetarian', 'ovo-vegetarian', 'vegan', 'pescetarian', 'paleo', 'primal', 'low fodmap', 'whole30']
+
+  initialDiets.map(async d => {
+    await Diet.findOrCreate({
+      where: { name: d }
+    });
+  });
+  next();
+})
 
 server.use('/', routes);
 

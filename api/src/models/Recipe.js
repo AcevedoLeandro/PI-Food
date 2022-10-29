@@ -13,7 +13,6 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isAlpha: true,
         notEmpty: true,
       }
     },
@@ -35,11 +34,14 @@ module.exports = (sequelize) => {
     steps: {
       type: DataTypes.ARRAY(DataTypes.TEXT)
     },
-    image: {
+    img: {
       type: DataTypes.STRING,
       validate: {
         isUrl: true
       }
+    },
+    dishTypes: {
+      type: DataTypes.ARRAY(DataTypes.TEXT)
     }
   },
     {
