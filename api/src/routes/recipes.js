@@ -9,10 +9,12 @@ recipes.get('/', async (req, res) => {
     try {
         let { name } = req.query;
         if (!name) return res.status(400).send('No recibo title.')
-        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=100&addRecipeInformation=true`); //&addRecipeInformation=true
+        let filteredRecipeList = [];
+
+        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=100&addRecipeInformation=true`);
 
         let recipeList = data.results.filter(r => r.title.toLowerCase().includes(name.toLowerCase()))
-        let filteredRecipeList = [];
+
         recipeList.map(r => {
             filteredRecipeList.push({
                 id: r.id,
@@ -30,18 +32,23 @@ recipes.get('/', async (req, res) => {
         let filteredRecipeDb = await Recipe.findAll({
             where: {
                 title: {
-                    [Op.substring]: `%${name}%`
+                    [Op.iLike]: `%${name}%`
                 }
             },
             include: {
                 model: Diet,
             }
         })
+        let resultFilteredREcipe = [...filteredRecipeList, ...filteredRecipeDb]
 
-        res.json([...filteredRecipeList, ...filteredRecipeDb])
+        if (resultFilteredREcipe.length != 0)
+            res.json(resultFilteredREcipe)
+        else
+            res.status(404).send(`No se encontraron recetas que contengan la palabra "${name}"`)
+
     }
     catch (error) {
-        res.status(404).send({ error: error.message, code: error.code })
+        res.status(400).send(error)
     }
 
 });
@@ -51,7 +58,7 @@ recipes.get('/:id', async (req, res) => {
 
     try {
         let { id } = req.params;
-        if (!id) return res.status(400).send('No recibo id.')
+        if (!id) return res.status(400).send('Error: ID must not be null')
 
         if (v4.test(id)) {
             const recipeDetailDb = await Recipe.findByPk(id, {
@@ -60,10 +67,11 @@ recipes.get('/:id', async (req, res) => {
                 }
             });
 
-            res.json(recipeDetailDb)
+            recipeDetailDb ? res.json(recipeDetailDb) : res.status(404).send(`No se encontro la receta con ID: ${id} `)
         }
         else {
             let { data } = await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${process.env.API_KEY}`);
+
 
             let recipeDetail = {
                 id: data.id,
@@ -73,13 +81,13 @@ recipes.get('/:id', async (req, res) => {
                 diets: data.diets,
                 summary: data.summary,
                 healthScore: data.healthScore,
-                steps: data.analyzedInstructions[0].steps.map(e => e.step)
+                steps: data.analyzedInstructions.length != 0 ? data.analyzedInstructions[0].steps.map(e => e.step) : [] //algunas recetas no traen paso a paso
             }
 
-            res.json(recipeDetail)
+            return res.json(recipeDetail)
         }
     } catch (error) {
-        res.status(404).send({ error: error.message, code: error.code })
+        res.status(404).send(error)
     };
 
 });
@@ -90,32 +98,32 @@ recipes.post('/', async (req, res) => {
 
         const { title, summary, healthScore, steps, img, diets, dishTypes } = req.body;
 
-        if (!title || !summary || !healthScore || !steps || !img || !diets || !dishTypes) { res.status(400).send(`faltan datos por ingresar`) }
-        else {
-            let newRecipe = {
-                title: title.toLowerCase(),
-                img,
-                dishTypes,
-                diets,
-                summary: summary.toLowerCase(),
-                healthScore,
-                steps
-            }
+        if (!title || !img || !summary || !diets || !dishTypes || !steps || !healthScore) { return res.status(400).send(`Faltan datos por ingresar`) }
 
-            const recipeCreate = await Recipe.create(newRecipe);
-
-            diets.map(async d => {
-                const newDiet = await Diet.findOrCreate({
-                    where: { name: d.toLowerCase() }
-                });
-                recipeCreate.addDiet(newDiet[0])
-
-            });
-            res.send('Objeto creado.')
+        let newRecipe = {
+            title,
+            img,
+            dishTypes,
+            diets,
+            summary,
+            healthScore,
+            steps
         }
 
+        const recipeCreate = await Recipe.create(newRecipe);
+
+        diets.map(async d => {
+            const newDiet = await Diet.findOrCreate({
+                where: { name: d.toLowerCase() }
+            });
+            recipeCreate.addDiet(newDiet[0])
+
+        });
+        res.send('Objeto creado Correctamente.')
+
+
     } catch (error) {
-        res.status(400).send(console.log(error))
+        res.status(400).send(error)
     }
 
 
