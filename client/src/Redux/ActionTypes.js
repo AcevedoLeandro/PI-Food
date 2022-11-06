@@ -1,0 +1,4 @@
+export const GET_ALL_RECIPES = 'GET_ALL_RECIPES'
+export const GET_RECIPES_BY_TITLE = 'GET_RECIPES_BY_TITLE'
+export const GET_DIETS = 'GET_DIETS'
+export const ADD_RECIPE = 'ADD_RECIPE'

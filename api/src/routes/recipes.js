@@ -1,53 +1,31 @@
 const { Router } = require('express');
-const { Recipe, Diet, RecipeDiet } = require('../db.js')
-const { Op } = require('sequelize');  // para usar en querys
 const recipes = Router()
+const { Recipe, Diet } = require('../db.js')
 const axios = require('axios');
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
+const getResultsByName = require('../Utils/getResultsByName');
+const getResults = require('../Utils/getResults');
 
 recipes.get('/', async (req, res) => {
     try {
         let { name } = req.query;
-        if (!name) return res.status(400).send('No recibo title.')
-        let filteredRecipeList = [];
+        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=4&addRecipeInformation=true`);
 
-        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=100&addRecipeInformation=true`);
-
-        let recipeList = data.results.filter(r => r.title.toLowerCase().includes(name.toLowerCase()))
-
-        recipeList.map(r => {
-            filteredRecipeList.push({
-                id: r.id,
-                title: r.title,
-                img: r.image,
-                dishType: r.dishTypes,
-                diets: r.diets,
-                summary: r.summary,
-                healthScore: r.healthScore,
-                steps: r.analyzedInstructions[0].steps.map(e => e.step)
-            })
-
-        })
-
-        let filteredRecipeDb = await Recipe.findAll({
-            where: {
-                title: {
-                    [Op.iLike]: `%${name}%`
-                }
-            },
-            include: {
-                model: Diet,
-            }
-        })
-        let resultFilteredREcipe = [...filteredRecipeList, ...filteredRecipeDb]
-
-        if (resultFilteredREcipe.length != 0)
-            res.json(resultFilteredREcipe)
-        else
-            res.status(404).send(`No se encontraron recetas que contengan la palabra "${name}"`)
+        if (!name) {
+            let results = await getResults(data)
+            res.json(results)
+        }
+        else {
+            let resultByName = await getResultsByName(data, name)
+            if (resultByName.length != 0)
+                res.json(resultByName)
+            else
+                res.status(404).send(`No se encontraron recetas que contengan la palabra "${name}"`)
+        }
 
     }
     catch (error) {
+        console.log(error)
         res.status(400).send(error)
     }
 
