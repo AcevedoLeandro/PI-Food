@@ -24,9 +24,8 @@ export default function NavBar() {
     <div>
       <div>Logo</div>
       <div>
-        <Link to={"/home"}>
-          <h1>FUUD</h1>
-        </Link>
+        <a href="/home"><h1>FUUD</h1></a>
+
       </div>
       <div>
         <ul>

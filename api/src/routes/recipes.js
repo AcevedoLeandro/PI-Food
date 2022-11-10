@@ -55,7 +55,7 @@ recipes.get('/:id', async (req, res) => {
                 id: data.id,
                 title: data.title,
                 img: data.image,
-                dishType: data.dishTypes,
+                dishTypes: data.dishTypes,
                 diets: data.diets,
                 summary: data.summary,
                 healthScore: data.healthScore,

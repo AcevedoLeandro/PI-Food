@@ -1,5 +1,4 @@
 import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE } from './ActionTypes'
-
 const initialState = {
     recipes: [],
     diets: [],

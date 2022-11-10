@@ -3,10 +3,11 @@ import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:3001'
 
 export function getAllRecipes() {
-    return async function (dispatch) {
+    return function (dispatch) {
         return axios.get('/recipes')
             .then(r => r.data)
             .then(data => dispatch({ type: GET_ALL_RECIPES, payload: data }))
+            .catch(e => console.log(e))
     }
 }
 
@@ -28,6 +29,7 @@ export function getDiets() {
 }
 
 export function createRecipe(payload) {
+
     return async function (dispatch) {
         axios.post('/recipes', payload)
             .then((r) => r.data)

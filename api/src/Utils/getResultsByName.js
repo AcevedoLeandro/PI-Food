@@ -10,7 +10,7 @@ module.exports = async function getResultsByName(data, name) {
             id: r.id,
             title: r.title,
             img: r.image,
-            dishType: r.dishTypes,
+            dishTypes: r.dishTypes,
             diets: r.diets,
             summary: r.summary,
             healthScore: r.healthScore,
@@ -24,8 +24,24 @@ module.exports = async function getResultsByName(data, name) {
         },
         include: {
             model: Diet,
+            attributes: ['name'],
+            through: {
+                attributes: []
+            }
         }
     });
+    resultDb.map(r => {
+        resultRecipes.push({
+            id: r.id,
+            title: r.title,
+            img: r.image,
+            dishTypes: r.dishTypes,
+            diets: r.diets.map(e => e.name),
+            summary: r.summary,
+            healthScore: r.healthScore,
+            steps: r.steps
+        })
+    })
 
-    return [...resultRecipes, ...resultDb];
+    return [...resultRecipes];
 }
