@@ -24,7 +24,7 @@ server.use((req, res, next) => {
 
 //initial diets
 server.use(async (req, res, next) => {
-  let initialDiets = ['gluten free', 'ketogenic', 'vegetarian', 'lacto-vegetarian', 'ovo-vegetarian', 'vegan', 'pescetarian', 'paleo', 'primal', 'low fodmap', 'whole30']
+  let initialDiets = ['gluten free', 'ketogenic', 'vegetarian', 'lacto ovo vegetarian', 'vegan', 'pescetarian', 'paleo', 'primal', 'low fodmap', 'whole 30']
 
   initialDiets.map(async d => {
     await Diet.findOrCreate({

@@ -1,48 +1,67 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as actions from '../../Redux/Actions'
 import { useState } from "react";
+import './navBar.css'
+
 
 export default function NavBar() {
-  var dispatch = useDispatch();
+  const [search, setSearch] = useState('');
+  const dispatch = useDispatch();
 
-  const [input, setInput] = useState('');
+  useEffect(() => {
+    dispatch(actions.getDiets())
+  }, [])
 
+  const stateDiets = useSelector((state) => state.diets)
 
   function handleOnChange(e) {
-    setInput(e.target.value)
+    setSearch(e.target.value)
   }
-
   function handleOnSubmit(e) {
     e.preventDefault();
-    dispatch(actions.getRecipesByTitle(input));
-    setInput('');
+    dispatch(actions.getRecipesByTitle(search));
+    setSearch('');
   };
 
+  function handleFilterSelect(e) {
+    e.preventDefault();
+    console.log(e.target.value)
+    dispatch(actions.filterByDiets(e.target.value))
+
+  }
+
   return (
-    <div>
-      <div>Logo</div>
-      <div>
-        <a href="/home"><h1>FUUD</h1></a>
-
+    <nav >
+      <div className="navBar">
+        <div>
+          <a href="/home"><img src="logo.png" alt="logo" width="200px" /></a>
+        </div>
+        <div className="searchAndCreate">
+          <input type="text" value={search} placeholder='Search...' onChange={e => handleOnChange(e)}></input>
+          <button type='Submit' onClick={e => handleOnSubmit(e)}>Search</button>
+          <Link to={"/home/createRecipe"}>
+            <h3>Create yor Recipe</h3>
+          </Link>
+        </div>
       </div>
-      <div>
-        <ul>
-          <li>
-            <Link to={"/home/createRecipe"}>
-              <h3>Create yor Recipe</h3>
-            </Link>
-          </li>
 
-          <li>
+      <div className='filterMenu'>
 
-            <input type="text" value={input} placeholder='Search...' onChange={e => handleOnChange(e)}></input>
-            <button type='Submit' onClick={e => handleOnSubmit(e)}>Search</button>
+        <select onChange={handleFilterSelect}>
+          <option defaultValue='all'>All</option>
+          {stateDiets.map((d, index) =>
+            <option key={index} value={d.name}>{d.name}</option>
+          )}
+        </select>
 
-          </li>
-        </ul>
+        <select>
+          <option value='asc'>A-z</option>
+          <option value='desc'>Z-a</option>
+          <option value='hs'>Health Score</option>
+        </select>
       </div>
-    </div>
+    </nav>
   );
 }

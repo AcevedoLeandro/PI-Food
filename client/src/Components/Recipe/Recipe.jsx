@@ -1,9 +1,9 @@
 import React from "react";
-
+import './recipe.css'
 function Recipe(props) {
 
   return (
-    <div>
+    <div className="recipe">
       <h3>{props.title}</h3>
       <p>{props.healthScore}</p>
       <img src={`${props.img}`} alt="img" />

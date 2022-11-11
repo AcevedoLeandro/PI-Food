@@ -1,4 +1,4 @@
-import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE } from './ActionTypes'
+import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS } from './ActionTypes'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:3001'
 
@@ -36,5 +36,12 @@ export function createRecipe(payload) {
             .then(data => dispatch({ type: ADD_RECIPE, payload: data }))
             .catch(e => console.log(e))
 
+    }
+}
+
+export function filterByDiets(payload) {
+    return {
+        type: FILTER_BY_DIETS,
+        payload
     }
 }

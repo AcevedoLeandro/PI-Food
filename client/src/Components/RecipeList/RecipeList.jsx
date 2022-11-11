@@ -1,26 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Recipe from "../Recipe/Recipe.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllRecipes, getDiets } from '../../Redux/Actions'
-
+import { getAllRecipes } from '../../Redux/Actions'
+import { useState } from "react";
+import Paginado from "../Paginado/Paginado.jsx";
+import './recipeList.css'
 
 export default function RecipeList() {
-
   let dispatch = useDispatch();
-  const recipes = useSelector((state) => state.recipes)
 
   useEffect(() => {
     dispatch(getAllRecipes());
-    dispatch(getDiets())
   }, [dispatch]);
 
+  const allrecipes = useSelector((state) => state.filteredRecipes)
+  const [currentPage, setCurrentPage] = useState(1)
+  const cantRecipePerPage = useRef(9).current
+  const lastRecipe = currentPage * cantRecipePerPage
+  const firstRecipe = lastRecipe - cantRecipePerPage
+  const currentRecipes = allrecipes.slice(firstRecipe, lastRecipe)
+
+  const pages = function (pageNumber) {
+    setCurrentPage(pageNumber)
+  }
 
   return (
-    <div>
-      {console.log(recipes)}
-      <ul>
+    <>
+      <div>
+        <Paginado cantAllRecipes={allrecipes.length} cantRecipePerPage={cantRecipePerPage} pages={pages} />
+      </div>
+      <div className='recipeListConteiner'>
         {
-          recipes?.map(r =>
+          currentRecipes?.map(r =>
             <Recipe
               key={r.id}
               title={r.title}
@@ -31,7 +42,9 @@ export default function RecipeList() {
             />
           )
         }
-      </ul>
-    </div>
+
+      </div>
+    </>
+
   );
 }
