@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Recipe from "../Recipe/Recipe.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllRecipes } from '../../Redux/Actions'
+import { filterByDiets, getAllRecipes, getDiets, orderRecipes } from '../../Redux/Actions'
 import { useState } from "react";
 import Paginado from "../Paginado/Paginado.jsx";
 import './recipeList.css'
@@ -11,21 +11,51 @@ export default function RecipeList() {
 
   useEffect(() => {
     dispatch(getAllRecipes());
+    dispatch(getDiets())
   }, [dispatch]);
-
+  const order = useRef(null)
+  const stateDiets = useSelector((state) => state.diets)
   const allrecipes = useSelector((state) => state.filteredRecipes)
   const [currentPage, setCurrentPage] = useState(1)
   const cantRecipePerPage = useRef(9).current
   const lastRecipe = currentPage * cantRecipePerPage
   const firstRecipe = lastRecipe - cantRecipePerPage
   const currentRecipes = allrecipes.slice(firstRecipe, lastRecipe)
-
+  const [refresh, setRefresh] = useState('')
   const pages = function (pageNumber) {
     setCurrentPage(pageNumber)
   }
 
+  function handleFilterSelect(e) {
+    e.preventDefault();
+    dispatch(filterByDiets(e.target.value))
+    setCurrentPage(1)
+    order.current.value = 'Select'
+  }
+
+  function handleOrderSelect(e) {
+    e.preventDefault();
+    dispatch(orderRecipes(e.target.value))
+    setRefresh(e.target.value)
+  }
   return (
     <>
+      <div className='filterMenu'>
+        <select onChange={handleFilterSelect}>
+          <option defaultValue='all'>All</option>
+          {stateDiets.map((d, index) =>
+            <option key={index} value={d.name}>{d.name}</option>
+          )}
+        </select>
+
+        <select ref={order} onChange={handleOrderSelect}>
+          <option value='Select'>Select..</option>
+          <option value='Asc'>A-z</option>
+          <option value='Desc'>Z-a</option>
+          <option value='HS'>Health Score</option>
+        </select>
+      </div>
+
       <div>
         <Paginado cantAllRecipes={allrecipes.length} cantRecipePerPage={cantRecipePerPage} pages={pages} />
       </div>
@@ -44,6 +74,7 @@ export default function RecipeList() {
         }
 
       </div>
+
     </>
 
   );

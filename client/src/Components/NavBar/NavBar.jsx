@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as actions from '../../Redux/Actions'
 import { useState } from "react";
 import './navBar.css'
@@ -9,12 +9,6 @@ import './navBar.css'
 export default function NavBar() {
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(actions.getDiets())
-  }, [])
-
-  const stateDiets = useSelector((state) => state.diets)
 
   function handleOnChange(e) {
     setSearch(e.target.value)
@@ -25,18 +19,11 @@ export default function NavBar() {
     setSearch('');
   };
 
-  function handleFilterSelect(e) {
-    e.preventDefault();
-    console.log(e.target.value)
-    dispatch(actions.filterByDiets(e.target.value))
-
-  }
-
   return (
     <nav >
       <div className="navBar">
         <div>
-          <a href="/home"><img src="logo.png" alt="logo" width="200px" /></a>
+          <a href="/home"><img src="logo.png" alt="logo" width="250px" /></a>
         </div>
         <div className="searchAndCreate">
           <input type="text" value={search} placeholder='Search...' onChange={e => handleOnChange(e)}></input>
@@ -47,21 +34,8 @@ export default function NavBar() {
         </div>
       </div>
 
-      <div className='filterMenu'>
 
-        <select onChange={handleFilterSelect}>
-          <option defaultValue='all'>All</option>
-          {stateDiets.map((d, index) =>
-            <option key={index} value={d.name}>{d.name}</option>
-          )}
-        </select>
-
-        <select>
-          <option value='asc'>A-z</option>
-          <option value='desc'>Z-a</option>
-          <option value='hs'>Health Score</option>
-        </select>
-      </div>
     </nav>
+
   );
 }

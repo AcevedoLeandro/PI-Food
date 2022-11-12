@@ -9,7 +9,7 @@ const getResults = require('../Utils/getResults');
 recipes.get('/', async (req, res) => {
     try {
         let { name } = req.query;
-        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=20&addRecipeInformation=true`);
+        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=9&addRecipeInformation=true`);
 
         if (!name) {
             let results = await getResults(data)

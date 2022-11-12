@@ -6,3 +6,10 @@
 .searchAndCreate {
   margin-top: 20px;
 }
+.filterMenu {
+  margin: 10px;
+}
+nav {
+  border: 1px solid #aaa;
+  background-color: rgb(245, 163, 163);
+}
