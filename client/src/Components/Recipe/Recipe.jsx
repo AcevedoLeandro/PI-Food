@@ -6,10 +6,10 @@ function Recipe(props) {
 
   return (
     <div className="recipe">
-      <h3>{props.title}</h3>
-      <p>{props.healthScore}</p>
-      <img src={`${props.img}`} alt="img" />
-      <div>
+      <h4>{props.title}</h4>
+      <Link to={`/home/detail/${props.id}`} ><img src={`${props.img}`} alt="img" /></Link>
+
+      <div className="dishTypes">
         <p>DISH TYPES</p>
         <ul>
           {props.dishTypes.map((d, index) =>
@@ -17,16 +17,14 @@ function Recipe(props) {
           )}
         </ul>
       </div>
-      <div>
+
+      <div className="diets">
         <p>DIETS</p>
         <ul>
           {props.diets.map((e, index) =>
             <li key={index}>{e}</li>
           )}
         </ul>
-      </div>
-      <div>
-        <Link to={`/home/detail/${props.id}`} ><button>...</button></Link>
       </div>
     </div>
   );

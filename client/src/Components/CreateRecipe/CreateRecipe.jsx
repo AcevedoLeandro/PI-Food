@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createRecipe, getDiets } from "../../Redux/Actions";
 import { useHistory } from "react-router-dom";
+import './createRecipe.css'
+
+
 export default function RecipeList() {
   let dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getDiets())
+  }, [])
+
   const stateDiets = useSelector((state) => state.diets)
 
   const i = useRef(0);
@@ -89,58 +97,50 @@ export default function RecipeList() {
   }
 
   return (
-    <div>
-
-      <div>
+    <div className="createContainer">
+      <div className='createinputs'>
         <form onSubmit={handleOnSubmit}>
           <div>
-            <label>Title</label>
             <input type='text' name="title" value={form.title} placeholder="Title..." onChange={handleOnChange}></input>
           </div>
-
           <div>
-            <label>Image</label>
             <input type='text' name="img" value={form.img} placeholder="Image URL..." onChange={handleOnChange}></input>
           </div>
-
           <div>
-            <label>Dish Types</label>
-            <input type='text' name="dishTypes" placeholder="E.g., lunch,main dish,dinner,etc" onChange={handleOnChangeDishTypes}></input>
+            <input type='text' name="dishTypes" placeholder="E.g., lunch , main dish , dinner , etc (comma-separated)" onChange={handleOnChangeDishTypes}></input>
           </div>
-
           <div>
-            <label>Summary</label>
-            <input type='text' name="summary" value={form.summary} placeholder="Tell us more..." onChange={handleOnChange}></input>
+            <input type='text' name="summary" value={form.summary} placeholder="Summary..." onChange={handleOnChange}></input>
           </div>
-
           <div>
-            <label>Health Score</label>
             <input type='number' name="healthScore" value={form.healthScore} placeholder="Raiting healthy, 0 to 100" onChange={handleOnChange}></input>
           </div>
-
           <div id='diets'>
-            <label>Seleccione una Dieta</label>
-            <select name='diets' onChange={handleSelectedDiets}>
-              <option > Choose...</option>
-              {stateDiets.map((d, index) =>
-                <option key={index} value={d.name} >{d.name}</option>
-              )}
-            </select>
-            <label>Agrega una nueva dieta</label>
-            <input type="text" onChange={handleInputDiets} />
+            <div id='dietsinput'>
+              <label>Select or input Diets</label>
+              <input type="text" onChange={handleInputDiets} />
+              <select name='diets' onChange={handleSelectedDiets}>
+                <option > Choose...</option>
+                {stateDiets.map((d, index) =>
+                  <option key={index} value={d.name} >{d.name}</option>
+                )}
+              </select>
+            </div>
             <div>
               <button onClick={addDiets}>+</button>
               <button onClick={removeDiets}>-</button>
             </div>
             <ul>
-              {form.diets.map((e, index) =>
-                <li key={index}>{e}</li>)}
+              <div className="lista" >
+                {form.diets.map((e, index) =>
+                  <li key={index}>{e}</li>)}
+              </div>
             </ul>
           </div>
 
           <div id='steps' ref={divSteps}>
+            <label>ADD STEPS</label>
             <button onClick={AddFields}>+</button>
-            <label>STEPS</label>
           </div>
 
           <input type="submit" />

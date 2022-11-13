@@ -34,7 +34,7 @@ module.exports = async function getResultsByName(data, name) {
         resultRecipes.push({
             id: r.id,
             title: r.title,
-            img: r.image,
+            img: r.img,
             dishTypes: r.dishTypes,
             diets: r.diets.map(e => e.name),
             summary: r.summary,

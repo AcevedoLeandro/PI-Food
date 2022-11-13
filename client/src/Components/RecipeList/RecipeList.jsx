@@ -44,19 +44,22 @@ export default function RecipeList() {
     <>
       <div className="div.select">
         <div className='filterMenu'>
-          <select onChange={handleFilterSelect}>
-            <option defaultValue='all'>All</option>
-            {stateDiets?.map((d, index) =>
-              <option key={index} value={d.name}>{d.name}</option>
-            )}
-          </select>
-
-          <select ref={order} onChange={handleOrderSelect}>
-            <option value='Select'>Select..</option>
-            <option value='Asc'>A-z</option>
-            <option value='Desc'>Z-a</option>
-            <option value='HS'>Health Score</option>
-          </select>
+          <div className="dietFilter">
+            <select onChange={handleFilterSelect}>
+              <option defaultValue='all'>All</option>
+              {stateDiets?.map((d, index) =>
+                <option key={index} value={d.name}>{d.name}</option>
+              )}
+            </select>
+          </div>
+          <div>
+            <select ref={order} onChange={handleOrderSelect}>
+              <option value='Select'>Select..</option>
+              <option value='Asc'>A-z</option>
+              <option value='Desc'>Z-a</option>
+              <option value='HS'>Health Score</option>
+            </select>
+          </div>
         </div>
       </div>
       {!load ?

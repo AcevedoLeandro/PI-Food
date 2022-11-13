@@ -5,6 +5,8 @@ const axios = require('axios');
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const getResultsByName = require('../Utils/getResultsByName');
 const getResults = require('../Utils/getResults');
+const diets = require('./diets.js');
+
 
 recipes.get('/', async (req, res) => {
     try {
@@ -40,13 +42,28 @@ recipes.get('/:id', async (req, res) => {
         if (!id) return res.status(400).send('Error: ID must not be null')
 
         if (v4.test(id)) {
-            const recipeDetailDb = await Recipe.findByPk(id, {
+            const DetailDb = await Recipe.findByPk(id, {
                 include: {
                     model: Diet,
+                    attributes: ['name'],
+                    through: {
+                        attributes: []
+                    }
                 }
             });
 
-            recipeDetailDb ? res.json(recipeDetailDb) : res.status(404).send(`No se encontro la receta con ID: ${id} `)
+            let resultDb = {
+                id: DetailDb.id,
+                title: DetailDb.title,
+                img: DetailDb.img,
+                dishTypes: DetailDb.dishTypes,
+                summary: DetailDb.summary,
+                healthScore: DetailDb.healthScore,
+                diets: DetailDb.diets.map(e => e.name),
+                steps: DetailDb.steps
+            }
+
+            DetailDb ? res.json(resultDb) : res.status(404).send(`No se encontro la receta con ID: ${id} `)
         }
         else {
             let { data } = await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${process.env.API_KEY}`);

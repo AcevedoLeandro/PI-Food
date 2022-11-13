@@ -2,9 +2,13 @@
   display: flex;
   justify-content: space-around;
   padding-top: 15px;
+  padding-bottom: 15px;
 }
 .searchAndCreate {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
 }
 .filterMenu {
   margin: 10px;
@@ -32,6 +36,14 @@ nav {
   width: 15px;
   height: 15px;
 }
+.create img {
+  width: 25px;
+  height: 25px;
+}
+
+.search input:hover {
+  background: #e9cc91;
+}
 .search input:focus {
   background: #e9cc91;
 }
@@ -41,5 +53,27 @@ nav {
   margin-left: 5px;
 }
 .search button:hover {
+  background-color: #e9cc91;
+}
+.create {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  color: #f0f0f0;
+}
+.create img {
+  width: 25px;
+  height: 23px;
+}
+
+.create button {
+  border: 1px solid transparent;
+  border-radius: 40px;
+  margin-left: 5px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.create button:hover {
   background-color: #e9cc91;
 }

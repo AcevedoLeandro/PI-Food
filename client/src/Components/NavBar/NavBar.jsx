@@ -1,15 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as actions from '../../Redux/Actions'
 import { useState } from "react";
 import './navBar.css'
 import logo from '../../Assets/logonuevo.png'
 import lupa from '../../Assets/lupa.png'
+import crear from '../../Assets/crear.png'
 export default function NavBar() {
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
-
+  const history = useHistory()
   function handleOnChange(e) {
     setSearch(e.target.value)
   }
@@ -30,9 +31,12 @@ export default function NavBar() {
             <input type="text" value={search} placeholder='Search...' onChange={e => handleOnChange(e)}></input>
             <button type='Submit' onClick={e => handleOnSubmit(e)}><img src={lupa} /></button>
           </div>
-          <div>
+          <div className="create">
+            <p>Crea tu Propia Receta</p>
             <Link to={"/home/createRecipe"}>
-              <h3>Create yor Recipe</h3>
+              <button>
+                <img src={crear} />
+              </button>
             </Link>
           </div>
         </div>

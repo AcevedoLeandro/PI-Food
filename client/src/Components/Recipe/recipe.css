@@ -1,7 +1,32 @@
 .recipe {
   border: 2px solid rgb(149, 52, 61);
   border-radius: 20px;
-  padding: 0px;
-  margin: 0px;
   backdrop-filter: blur(10px);
+  font-size: 15px;
+}
+.recipe h4 {
+  height: 30px;
+}
+.recipe img {
+  border-radius: 100px;
+  margin: 0;
+  width: 100px;
+  height: 100px;
+}
+
+ul {
+  display: inline;
+}
+
+.recipe li {
+  background-color: rgb(149, 52, 61, 0.3);
+  border-radius: 3px;
+  padding: 3px;
+  margin: 1px;
+}
+.dishTypes {
+  margin: 10px;
+}
+.diets {
+  margin: 10px;
 }

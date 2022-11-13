@@ -1,0 +1,57 @@
+.detailcontainer {
+  display: inline-block;
+  margin-bottom: 50px;
+  margin-top: 25px;
+}
+
+.detail {
+  border: 2px solid rgb(149, 52, 61);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  font-size: 15px;
+  width: 800px;
+}
+.detail img {
+  width: 550px;
+}
+.detail h4 {
+  margin-top: 5px;
+  margin-bottom: 2px;
+  height: 30px;
+}
+.healthScore {
+  background-color: #0b8240;
+  margin-bottom: 5px;
+  font-size: large;
+}
+ul {
+  display: inline;
+}
+
+.detail li {
+  background-color: rgb(149, 52, 61, 0.3);
+  border-radius: 3px;
+  padding: 3px;
+  margin: 1px;
+}
+
+.summary {
+  background-color: rgb(149, 52, 61, 0.3);
+  border-radius: 3px;
+  padding: 3px;
+  margin: 15px;
+}
+
+.dishTypes {
+  margin: 10px;
+}
+.diets {
+  margin: 10px;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 15px;
+}
