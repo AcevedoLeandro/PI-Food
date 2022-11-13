@@ -1,8 +1,9 @@
-import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS, ORDER_RECIPES } from './ActionTypes'
+import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS, ORDER_RECIPES, GET_RECIPE_BY_DETAIL, LOADING } from './ActionTypes'
 const initialState = {
     recipes: [],
     filteredRecipes: [],
     diets: [],
+    recipeDetail: [],
     loading: false
 }
 
@@ -12,23 +13,33 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 recipes: action.payload,
-                filteredRecipes: action.payload
+                filteredRecipes: action.payload,
+                loading: false
             }
         case GET_RECIPES_BY_TITLE:
             return {
                 ...state,
                 filteredRecipes: action.payload
             }
+        case GET_RECIPE_BY_DETAIL:
+            return {
+                ...state,
+                recipeDetail: action.payload,
+                loading: false
+            }
+
         case GET_DIETS:
             return {
                 ...state,
-                diets: action.payload
+                diets: action.payload,
             }
+
         case ADD_RECIPE:
             return {
                 ...state,
                 payload: action.payload
             }
+
         case FILTER_BY_DIETS:
             const recipes = state.recipes
             const filteredRecipes = action.payload === 'All' ? recipes : recipes.filter(rec => rec.diets ? rec.diets.includes(action.payload) : false)
@@ -36,6 +47,7 @@ export default function reducer(state = initialState, action) {
                 ...state,
                 filteredRecipes
             }
+
         case ORDER_RECIPES:
             var orderedRecipes = []
             if (action.payload === 'Asc') {
@@ -66,6 +78,12 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 filteredRecipes: orderedRecipes
+            }
+
+        case LOADING:
+            return {
+                ...state,
+                loading: true
             }
 
         default:

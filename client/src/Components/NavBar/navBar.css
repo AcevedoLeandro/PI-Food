@@ -10,6 +10,36 @@
   margin: 10px;
 }
 nav {
-  border: 1px solid #aaa;
-  background-color: rgb(245, 163, 163);
+  background-color: rgb(149, 52, 61);
+}
+
+.search {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+.search input {
+  border: 0;
+  outline: 0;
+  background: #f0f0f0;
+  color: #010101;
+  border-radius: 9px;
+  text-align: center;
+  height: 20px;
+}
+.search img {
+  padding: 0;
+  width: 15px;
+  height: 15px;
+}
+.search input:focus {
+  background: #e9cc91;
+}
+.search button {
+  border: 1px solid transparent;
+  border-radius: 30px;
+  margin-left: 5px;
+}
+.search button:hover {
+  background-color: #e9cc91;
 }

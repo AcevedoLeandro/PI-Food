@@ -1,4 +1,4 @@
-import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS, ORDER_RECIPES } from './ActionTypes'
+import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS, ORDER_RECIPES, GET_RECIPE_BY_DETAIL, LOADING } from './ActionTypes'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:3001'
 
@@ -28,6 +28,15 @@ export function getDiets() {
     }
 }
 
+export function getRecipeByDetail(id) {
+    return async function (dispatch) {
+        return axios.get(`/recipes/${id}`)
+            .then(r => r.data)
+            .then(data => dispatch({ type: GET_RECIPE_BY_DETAIL, payload: data }))
+
+    }
+}
+
 export function createRecipe(payload) {
 
     return async function (dispatch) {
@@ -50,5 +59,11 @@ export function orderRecipes(payload) {
     return {
         type: ORDER_RECIPES,
         payload
+    }
+}
+
+export function loading() {
+    return {
+        type: LOADING
     }
 }

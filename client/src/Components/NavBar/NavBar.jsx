@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import * as actions from '../../Redux/Actions'
 import { useState } from "react";
 import './navBar.css'
-
-
+import logo from '../../Assets/logonuevo.png'
+import lupa from '../../Assets/lupa.png'
 export default function NavBar() {
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
@@ -23,14 +23,18 @@ export default function NavBar() {
     <nav >
       <div className="navBar">
         <div>
-          <a href="/home"><img src="logo.png" alt="logo" width="250px" /></a>
+          <a href="/home"><img src={logo} alt="logo" width="150px" /></a>
         </div>
         <div className="searchAndCreate">
-          <input type="text" value={search} placeholder='Search...' onChange={e => handleOnChange(e)}></input>
-          <button type='Submit' onClick={e => handleOnSubmit(e)}>Search</button>
-          <Link to={"/home/createRecipe"}>
-            <h3>Create yor Recipe</h3>
-          </Link>
+          <div className="search">
+            <input type="text" value={search} placeholder='Search...' onChange={e => handleOnChange(e)}></input>
+            <button type='Submit' onClick={e => handleOnSubmit(e)}><img src={lupa} /></button>
+          </div>
+          <div>
+            <Link to={"/home/createRecipe"}>
+              <h3>Create yor Recipe</h3>
+            </Link>
+          </div>
         </div>
       </div>
 

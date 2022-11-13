@@ -16,12 +16,12 @@
 }
 
 .paginado li a:focus {
-  background-color: rgb(245, 163, 163);
-  color: white;
+  background-color: rgb(230, 164, 75);
+  color: black;
   border-radius: 5px;
 }
 
 .paginado li a:hover {
-  background-color: #ddd;
-  color: black;
+  background-color: rgb(124, 129, 125);
+  color: white;
 }

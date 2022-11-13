@@ -1,5 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import './recipe.css'
+
 function Recipe(props) {
 
   return (
@@ -22,6 +24,9 @@ function Recipe(props) {
             <li key={index}>{e}</li>
           )}
         </ul>
+      </div>
+      <div>
+        <Link to={`/home/detail/${props.id}`} ><button>...</button></Link>
       </div>
     </div>
   );

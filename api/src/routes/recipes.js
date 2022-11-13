@@ -9,7 +9,7 @@ const getResults = require('../Utils/getResults');
 recipes.get('/', async (req, res) => {
     try {
         let { name } = req.query;
-        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=9&addRecipeInformation=true`);
+        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=3&addRecipeInformation=true`);
 
         if (!name) {
             let results = await getResults(data)
@@ -35,6 +35,7 @@ recipes.get('/:id', async (req, res) => {
     const v4 = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
     try {
+
         let { id } = req.params;
         if (!id) return res.status(400).send('Error: ID must not be null')
 

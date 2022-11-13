@@ -1,6 +1,7 @@
 .recipe {
-  border: 1px black solid;
+  border: 2px solid rgb(149, 52, 61);
   border-radius: 20px;
   padding: 0px;
   margin: 0px;
+  backdrop-filter: blur(10px);
 }

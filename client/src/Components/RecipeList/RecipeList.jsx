@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import Recipe from "../Recipe/Recipe.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { filterByDiets, getAllRecipes, getDiets, orderRecipes } from '../../Redux/Actions'
+import { filterByDiets, getAllRecipes, getDiets, loading, orderRecipes } from '../../Redux/Actions'
 import { useState } from "react";
 import Paginado from "../Paginado/Paginado.jsx";
 import './recipeList.css'
@@ -10,9 +10,11 @@ export default function RecipeList() {
   let dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllRecipes());
+    dispatch(loading())
     dispatch(getDiets())
+    dispatch(getAllRecipes());
   }, [dispatch]);
+  const load = useSelector(state => state.loading)
   const order = useRef(null)
   const stateDiets = useSelector((state) => state.diets)
   const allrecipes = useSelector((state) => state.filteredRecipes)
@@ -40,42 +42,49 @@ export default function RecipeList() {
   }
   return (
     <>
-      <div className='filterMenu'>
-        <select onChange={handleFilterSelect}>
-          <option defaultValue='all'>All</option>
-          {stateDiets.map((d, index) =>
-            <option key={index} value={d.name}>{d.name}</option>
-          )}
-        </select>
+      <div className="div.select">
+        <div className='filterMenu'>
+          <select onChange={handleFilterSelect}>
+            <option defaultValue='all'>All</option>
+            {stateDiets?.map((d, index) =>
+              <option key={index} value={d.name}>{d.name}</option>
+            )}
+          </select>
 
-        <select ref={order} onChange={handleOrderSelect}>
-          <option value='Select'>Select..</option>
-          <option value='Asc'>A-z</option>
-          <option value='Desc'>Z-a</option>
-          <option value='HS'>Health Score</option>
-        </select>
+          <select ref={order} onChange={handleOrderSelect}>
+            <option value='Select'>Select..</option>
+            <option value='Asc'>A-z</option>
+            <option value='Desc'>Z-a</option>
+            <option value='HS'>Health Score</option>
+          </select>
+        </div>
       </div>
-
-      <div>
-        <Paginado cantAllRecipes={allrecipes.length} cantRecipePerPage={cantRecipePerPage} pages={pages} />
-      </div>
-      <div className='recipeListConteiner'>
-        {
-          currentRecipes?.map(r =>
-            <Recipe
-              key={r.id}
-              title={r.title}
-              img={r.img}
-              healthScore={r.healthScore}
-              dishTypes={r.dishTypes}
-              diets={r.diets}
-            />
-          )
-        }
-
-      </div>
-
+      {!load ?
+        <div>
+          <div>
+            <Paginado cantAllRecipes={allrecipes.length} cantRecipePerPage={cantRecipePerPage} pages={pages} />
+          </div>
+          <div className='recipeListConteiner'>
+            {
+              currentRecipes?.map(r =>
+                <Recipe
+                  key={r.id}
+                  id={r.id}
+                  title={r.title}
+                  img={r.img}
+                  healthScore={r.healthScore}
+                  dishTypes={r.dishTypes}
+                  diets={r.diets}
+                />
+              )
+            }
+          </div>
+        </div>
+        :
+        <div>
+          <h3>LOADING...</h3>
+        </div>
+      }
     </>
-
   );
 }

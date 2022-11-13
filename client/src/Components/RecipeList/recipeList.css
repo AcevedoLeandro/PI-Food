@@ -18,3 +18,21 @@ li {
   width: 150px;
   height: 150px;
 }
+
+.filterMenu {
+  background-color: rgb(149, 52, 61);
+  margin: 0;
+  padding-bottom: 10;
+  height: 40px;
+}
+.filterMenu select {
+  padding: 3px 3px;
+  outline: 0;
+  background: #f0f0f0;
+  color: #010101;
+  border-radius: 9px;
+  border: 1px solid transparent;
+}
+.filterMenu select:hover {
+  background: #e9cc91;
+}
