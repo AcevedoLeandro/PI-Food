@@ -5,6 +5,7 @@ import { filterByDiets, getAllRecipes, getDiets, loading, orderRecipes } from '.
 import { useState } from "react";
 import Paginado from "../Paginado/Paginado.jsx";
 import './recipeList.css'
+import imgLoading from '../../Assets/imgLoading.gif'
 
 export default function RecipeList() {
   let dispatch = useDispatch();
@@ -62,6 +63,7 @@ export default function RecipeList() {
           </div>
         </div>
       </div>
+
       {!load ?
         <div>
           <div>
@@ -84,7 +86,8 @@ export default function RecipeList() {
           </div>
         </div>
         :
-        <div>
+        <div >
+          <img src={imgLoading} alt='loadIMG' />
           <h3>LOADING...</h3>
         </div>
       }

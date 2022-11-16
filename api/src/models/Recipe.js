@@ -25,13 +25,15 @@ module.exports = (sequelize) => {
     },
     healthScore: {
       type: DataTypes.INTEGER,
+      allowNull: false,
       validate: {
         min: 0,
         max: 100
       }
     },
     steps: {
-      type: DataTypes.ARRAY(DataTypes.TEXT)
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      allowNull: false,
     },
     img: {
       type: DataTypes.STRING,

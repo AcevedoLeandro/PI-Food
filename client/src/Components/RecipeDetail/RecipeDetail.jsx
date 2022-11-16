@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getRecipeByDetail, loading } from '../../Redux/Actions'
 import './recipeDetail.css'
+import imgLoading from '../../Assets/imgLoading.gif'
 
 export default function RecipeDetail({ match }) {
     let { id } = match.params
@@ -10,10 +11,9 @@ export default function RecipeDetail({ match }) {
     useEffect(() => {
         dispatch(loading())
         dispatch(getRecipeByDetail(id))
-    }, [dispatch])
+    }, [dispatch, id])
     let detail = useSelector(state => state.recipeDetail)
     let load = useSelector(state => state.loading)
-    console.log(detail)
     return (
         <>
             {!load ?
@@ -59,8 +59,9 @@ export default function RecipeDetail({ match }) {
                     </div>
                 </div>
                 :
-                <div>
-                    <h3>loading</h3>
+                <div >
+                    <img src={imgLoading} alt='loadIMG' />
+                    <h3>LOADING...</h3>
                 </div>
             }
         </>

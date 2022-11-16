@@ -11,10 +11,11 @@ export default function RecipeList() {
 
   useEffect(() => {
     dispatch(getDiets())
-  }, [])
+    validateSteps()
+  }, [dispatch])
 
   const stateDiets = useSelector((state) => state.diets)
-
+  const payloadstate = useSelector(state => state.payload)
   const i = useRef(0);
   const pasos = useRef([])
 
@@ -28,8 +29,10 @@ export default function RecipeList() {
   }
   const [steps, setSteps] = useState([])
   const [form, setForm] = useState(initialstateForm)
+  const [error, setError] = useState({ img: false, title: false, dishTypes: false, summary: false, steps: true, healthScore: false })
   var newdiet = ''
   var newInputDiet = ''
+
   function handleOnChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
@@ -45,8 +48,8 @@ export default function RecipeList() {
     }
     else newdiet = ''
   }
-  function handleInputDiets(e) {
 
+  function handleInputDiets(e) {
     newInputDiet = e.target.value
   }
 
@@ -63,7 +66,6 @@ export default function RecipeList() {
     diets.pop()
     setForm(prev => ({ ...prev, diets: diets }))
   }
-
 
   function handleOnChangeSteps(e) {
     let id = e.target.id
@@ -82,6 +84,7 @@ export default function RecipeList() {
     field.onchange = (e) => handleOnChangeSteps(e)
     divSteps.current.append(field)
     i.current++
+    validateSteps()
   }
 
   const history = useHistory()
@@ -92,28 +95,67 @@ export default function RecipeList() {
     setForm(initialstateForm)
     setSteps([])
     dispatch(getDiets())
-    history.push('/home')
+  }
 
+  function validate(e) {
+    switch (e.target.name) {
+      case 'title':
+        return !(/^[A-Za-z ]+$/).test(e.target.value) ?
+          setError(prev => ({ ...prev, title: 'Solo letras sin numeros ni caracteres especiales.' })) : setError(prev => ({ ...prev, title: false }))
+
+      case 'img':
+        return !(/https?:\/\/.*\.(?:png|jpg)/g).test(e.target.value) ?
+          setError(prev => ({ ...prev, img: 'No es una url Valida' })) : setError(prev => ({ ...prev, img: false }))
+
+      case 'dishTypes':
+        return (/^[A-Za-z0-9 ]+(,[A-Za-z0-9 ]+)*$/).test(e.target.value) || e.target.value.length === 0 ?
+          setError(prev => ({ ...prev, dishTypes: false })) : setError(prev => ({ ...prev, dishTypes: 'Solo palabras o frases separadas por coma.' }))
+
+      case 'healthScore':
+        return e.target.value < 0 || e.target.value > 100 ?
+          setError(prev => ({ ...prev, healthScore: 'Numero invalido. Solo entre 0 y 100' })) : setError(prev => ({ ...prev, healthScore: false }))
+
+      case 'summary':
+        return e.target.value.length > 0 ?
+          setError(prev => ({ ...prev, summary: false })) : setError(prev => ({ ...prev, summary: 'Este campo no puede estar vacio' }))
+
+      default:
+        break;
+    }
+  }
+
+  function validateSteps() {
+    i.current === 0 ?
+      setError(prev => ({ ...prev, steps: 'Ingresar al menos 1 paso.' })) : setError(prev => ({ ...prev, steps: false }))
   }
 
   return (
-    <div className="createContainer">
+
+    < div className="createContainer" >
       <div className='createinputs'>
+        {payloadstate ? <h3>Receta creada Correctamente. ID: <a href={`/home/detail/${payloadstate}`} >{payloadstate}</a> </h3>
+          : false}
+
         <form onSubmit={handleOnSubmit}>
           <div>
-            <input type='text' name="title" value={form.title} placeholder="Title..." onChange={handleOnChange}></input>
+            <input type='text' name="title" value={form.title} placeholder="Title..." onChange={handleOnChange} onBlur={(e) => validate(e)} className={error.title ? 'warning' : undefined}></input><br />
+            {error.title ? <span>{error.title}</span> : false}
           </div>
           <div>
-            <input type='text' name="img" value={form.img} placeholder="Image URL..." onChange={handleOnChange}></input>
+            <input type='text' name="img" value={form.img} placeholder="Image URL..." onChange={handleOnChange} onBlur={(e) => validate(e)} className={error.img ? 'warning' : undefined}></input><br />
+            {error.img ? <span>{error.img}</span> : false}
           </div>
           <div>
-            <input type='text' name="dishTypes" placeholder="E.g., lunch , main dish , dinner , etc (comma-separated)" onChange={handleOnChangeDishTypes}></input>
+            <input type='text' name="dishTypes" placeholder="E.g., lunch , main dish , dinner , etc (comma-separated)" onChange={handleOnChangeDishTypes} onBlur={(e) => validate(e)} className={error.dishTypes ? 'warning' : undefined} ></input><br />
+            {error.dishTypes ? <span>{error.dishTypes}</span> : false}
           </div>
           <div>
-            <input type='text' name="summary" value={form.summary} placeholder="Summary..." onChange={handleOnChange}></input>
+            <input type='text' name="summary" value={form.summary} placeholder="Summary..." onChange={handleOnChange} onBlur={(e) => validate(e)} className={error.summary ? 'warning' : undefined} ></input><br />
+            {error.summary ? <span>{error.summary}</span> : false}
           </div>
           <div>
-            <input type='number' name="healthScore" value={form.healthScore} placeholder="Raiting healthy, 0 to 100" onChange={handleOnChange}></input>
+            <input type='number' name="healthScore" value={form.healthScore} onChange={handleOnChange} onBlur={(e) => validate(e)} className={error.healthScore ? 'warning' : undefined}></input><br />
+            {error.healthScore ? <span>{error.healthScore}</span> : false}
           </div>
           <div id='diets'>
             <div id='dietsinput'>
@@ -140,14 +182,16 @@ export default function RecipeList() {
 
           <div id='steps' ref={divSteps}>
             <label>ADD STEPS</label>
-            <button onClick={AddFields}>+</button>
+            {error.steps ? <span>{error.steps}</span> : false}
+            <button onClick={AddFields} className={error.steps ? 'warning' : undefined}>+</button>
           </div>
 
           <input type="submit" />
         </form>
       </div>
+    </div >
 
-    </div>
   );
+
 }
 

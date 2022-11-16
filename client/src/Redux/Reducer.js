@@ -1,10 +1,11 @@
-import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS, ORDER_RECIPES, GET_RECIPE_BY_DETAIL, LOADING } from './ActionTypes'
+import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS, ORDER_RECIPES, GET_RECIPE_BY_DETAIL, LOADING, ERROR } from './ActionTypes'
 const initialState = {
     recipes: [],
     filteredRecipes: [],
     diets: [],
     recipeDetail: [],
-    loading: false
+    loading: false,
+    error: {}
 }
 
 export default function reducer(state = initialState, action) {
@@ -84,6 +85,11 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 loading: true
+            }
+        case ERROR:
+            return {
+                ...state,
+                error: action.payload
             }
 
         default:

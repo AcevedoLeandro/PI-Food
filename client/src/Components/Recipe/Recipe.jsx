@@ -26,6 +26,7 @@ function Recipe(props) {
           )}
         </ul>
       </div>
+      <h3>{props.healthScore}</h3>
     </div>
   );
 }

@@ -2,33 +2,96 @@ const { Router } = require('express');
 const recipes = Router()
 const { Recipe, Diet } = require('../db.js')
 const axios = require('axios');
+const { Op } = require('sequelize');
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-const getResultsByName = require('../Utils/getResultsByName');
-const getResults = require('../Utils/getResults');
-const diets = require('./diets.js');
+const imgDefault = 'https://cdn-icons-png.flaticon.com/512/85/85488.png'
+
+async function getDataApi(name) {
+    let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=4&addRecipeInformation=true`);
+    var apiResult
+    let resultRecipes = []
+
+    if (name) {
+        apiResult = data.results.filter((r) => r.title.toLowerCase().includes(name.toLowerCase()));
+    }
+    else { apiResult = data.results }
+
+    apiResult.map((r) => {
+        resultRecipes.push({
+            id: r.id,
+            title: r.title,
+            img: r.image,
+            dishTypes: r.dishTypes,
+            diets: r.diets,
+            summary: r.summary,
+            healthScore: r.healthScore,
+            steps: r.analyzedInstructions[0] ? r.analyzedInstructions[0].steps.map((e) => e.step) : [],
+        });
+    });
+    return [...resultRecipes]
+}
+
+async function getDataDB(name) {
+    var resultDb
+    let resultRecipes = []
+    if (name) {
+        resultDb = await Recipe.findAll({
+            where: {
+                title: { [Op.iLike]: `%${name}%` }
+            },
+            include: {
+                model: Diet,
+                attributes: ['name'],
+                through: {
+                    attributes: []
+                }
+            }
+        });
+    }
+    else {
+        resultDb = await Recipe.findAll({
+            include: {
+                model: Diet,
+                attributes: ['name'],
+                through: {
+                    attributes: []
+                }
+            }
+        });
+    }
+
+    resultDb.map(r => {
+        resultRecipes.push({
+            id: r.id,
+            title: r.title,
+            img: r.img,
+            dishTypes: r.dishTypes,
+            diets: r.diets.map(e => e.name),
+            summary: r.summary,
+            healthScore: r.healthScore,
+            steps: r.steps
+        })
+    })
+    return [...resultRecipes]
+}
 
 
 recipes.get('/', async (req, res) => {
+
     try {
+
         let { name } = req.query;
-        let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=3&addRecipeInformation=true`);
-
-        if (!name) {
-            let results = await getResults(data)
-            res.json(results)
-        }
-        else {
-            let resultByName = await getResultsByName(data, name)
-            if (resultByName.length != 0)
-                res.json(resultByName)
-            else
-                res.status(404).send(`No se encontraron recetas que contengan la palabra "${name}"`)
-        }
-
+        let responseApi = await getDataApi(name)
+        let responseDB = await getDataDB(name)
+        let response = [...responseApi, ...responseDB]
+        if (response.length > 0)
+            res.json(response)
+        else
+            res.status(404).send('no se encontraron recetas con ese nombre')
     }
     catch (error) {
+        res.status(500).json(error)
         console.log(error)
-        res.status(400).send(error)
     }
 
 });
@@ -68,7 +131,6 @@ recipes.get('/:id', async (req, res) => {
         else {
             let { data } = await axios.get(`https://api.spoonacular.com/recipes/${id}/information?apiKey=${process.env.API_KEY}`);
 
-
             let recipeDetail = {
                 id: data.id,
                 title: data.title,
@@ -92,15 +154,14 @@ recipes.post('/', async (req, res) => {
 
     try {
 
-        const { title, summary, healthScore, steps, img, diets, dishTypes } = req.body;
-
-        if (!title || !img || !summary || !diets || !dishTypes || !steps || !healthScore) { return res.status(400).send(`Faltan datos por ingresar`) }
+        const { title, summary, healthScore, steps, img, dishTypes, diets } = req.body;
+        if (!title || !summary || !steps || !healthScore) { return res.status(400).send(`Faltan datos por ingresar`) }
 
         let newRecipe = {
             title,
-            img,
-            dishTypes,
-            diets,
+            img: img ? img : imgDefault,
+            dishTypes: dishTypes ? dishTypes : [],
+            diets: diets ? diets : [],
             summary,
             healthScore,
             steps
@@ -108,15 +169,16 @@ recipes.post('/', async (req, res) => {
 
         const recipeCreate = await Recipe.create(newRecipe);
 
-        diets.map(async d => {
+        diets && diets.map(async d => {
             const newDiet = await Diet.findOrCreate({
                 where: { name: d.toLowerCase() }
             });
             recipeCreate.addDiet(newDiet[0])
 
         });
-        res.send('Objeto creado Correctamente.')
+        let { id } = recipeCreate
 
+        res.json(id)
 
     } catch (error) {
         res.status(400).send(error)

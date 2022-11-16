@@ -1,4 +1,4 @@
-import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS, ORDER_RECIPES, GET_RECIPE_BY_DETAIL, LOADING } from './ActionTypes'
+import { GET_ALL_RECIPES, GET_RECIPES_BY_TITLE, GET_DIETS, ADD_RECIPE, FILTER_BY_DIETS, ORDER_RECIPES, GET_RECIPE_BY_DETAIL, LOADING, ERROR } from './ActionTypes'
 import axios from 'axios'
 axios.defaults.baseURL = 'http://localhost:3001'
 
@@ -16,7 +16,7 @@ export function getRecipesByTitle(name) {
         return axios.get(`/recipes/?name=${name}`)
             .then(r => r.data)
             .then(data => dispatch({ type: GET_RECIPES_BY_TITLE, payload: data }))
-        // hacer catch por si no encuentra nada!
+            .catch(data => dispatch({ type: ERROR, payload: data }))
     }
 }
 

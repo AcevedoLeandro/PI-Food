@@ -96,3 +96,12 @@
   height: 40px;
   border: 1.5px solid rgb(149, 52, 61);
 }
+.createContainer span {
+  color: rgb(197, 0, 0);
+}
+.createContainer .warning {
+  border: 2px solid rgb(238, 0, 0) !important;
+}
+.createinputs h3 {
+  color: rgb(149, 52, 61);
+}

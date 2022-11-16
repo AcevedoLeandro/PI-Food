@@ -1,0 +1,24 @@
+.landing {
+  margin-top: 100px;
+  background-color: #e6e1d7;
+}
+.landing button {
+  width: 100px;
+  height: 50px;
+  margin-bottom: 30px;
+  background-color: #dda14b;
+  color: black;
+  border: 1px solid transparent;
+}
+.landing button:hover {
+  background-color: #95343d;
+  color: white;
+  cursor: grab;
+}
+.landig img {
+  margin-bottom: 20px;
+}
+
+.landing {
+  overflow: hidden;
+}
