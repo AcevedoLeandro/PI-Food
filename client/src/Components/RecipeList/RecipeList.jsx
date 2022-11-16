@@ -16,6 +16,7 @@ export default function RecipeList() {
     dispatch(getAllRecipes());
   }, [dispatch]);
   const load = useSelector(state => state.loading)
+  const error = useSelector(state => state.error)
   const order = useRef(null)
   const stateDiets = useSelector((state) => state.diets)
   const allrecipes = useSelector((state) => state.filteredRecipes)
@@ -65,26 +66,31 @@ export default function RecipeList() {
       </div>
 
       {!load ?
-        <div>
+        !Object.entries(error).length > 0 ?
           <div>
-            <Paginado cantAllRecipes={allrecipes.length} cantRecipePerPage={cantRecipePerPage} pages={pages} />
+            <div>
+              <Paginado cantAllRecipes={allrecipes.length} cantRecipePerPage={cantRecipePerPage} pages={pages} />
+            </div>
+            <div className='recipeListConteiner'>
+              {
+                currentRecipes?.map(r =>
+                  <Recipe
+                    key={r.id}
+                    id={r.id}
+                    title={r.title}
+                    img={r.img}
+                    healthScore={r.healthScore}
+                    dishTypes={r.dishTypes}
+                    diets={r.diets}
+                  />
+                )
+              }
+            </div>
           </div>
-          <div className='recipeListConteiner'>
-            {
-              currentRecipes?.map(r =>
-                <Recipe
-                  key={r.id}
-                  id={r.id}
-                  title={r.title}
-                  img={r.img}
-                  healthScore={r.healthScore}
-                  dishTypes={r.dishTypes}
-                  diets={r.diets}
-                />
-              )
-            }
+          :
+          <div>
+            <h3 id='aviso'>No se encontraron recetas con ese nombre.</h3>
           </div>
-        </div>
         :
         <div >
           <img src={imgLoading} alt='loadIMG' />

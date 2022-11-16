@@ -20,7 +20,8 @@ export default function reducer(state = initialState, action) {
         case GET_RECIPES_BY_TITLE:
             return {
                 ...state,
-                filteredRecipes: action.payload
+                filteredRecipes: action.payload,
+                loading: false
             }
         case GET_RECIPE_BY_DETAIL:
             return {
@@ -89,7 +90,8 @@ export default function reducer(state = initialState, action) {
         case ERROR:
             return {
                 ...state,
-                error: action.payload
+                error: action.payload,
+                loading: false
             }
 
         default:

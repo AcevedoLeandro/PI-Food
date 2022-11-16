@@ -19,6 +19,7 @@ export default function NavBar() {
     e.preventDefault();
     dispatch(actions.getRecipesByTitle(search));
     setSearch('');
+    dispatch(actions.loading())
   };
 
   return (

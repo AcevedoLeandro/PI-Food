@@ -36,3 +36,7 @@ li {
 .dietFilter {
   margin-right: 10px;
 }
+#aviso {
+  background-color: #f0f0f0;
+  color: rgb(166, 36, 49);
+}

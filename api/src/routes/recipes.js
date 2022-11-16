@@ -91,7 +91,6 @@ recipes.get('/', async (req, res) => {
     }
     catch (error) {
         res.status(500).json(error)
-        console.log(error)
     }
 
 });
@@ -155,7 +154,7 @@ recipes.post('/', async (req, res) => {
     try {
 
         const { title, summary, healthScore, steps, img, dishTypes, diets } = req.body;
-        if (!title || !summary || !steps || !healthScore) { return res.status(400).send(`Faltan datos por ingresar`) }
+        if (!title || !summary || !steps || healthScore === undefined) { return res.status(400).send(`Faltan datos por ingresar`) }
 
         let newRecipe = {
             title,

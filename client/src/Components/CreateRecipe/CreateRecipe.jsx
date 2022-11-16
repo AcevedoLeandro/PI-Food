@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createRecipe, getDiets } from "../../Redux/Actions";
-import { useHistory } from "react-router-dom";
 import './createRecipe.css'
 
 
@@ -87,7 +86,7 @@ export default function RecipeList() {
     validateSteps()
   }
 
-  const history = useHistory()
+
   function handleOnSubmit(e) {
     e.preventDefault();
     let formulario = { ...form, steps: steps.current }
@@ -136,7 +135,7 @@ export default function RecipeList() {
         {payloadstate ? <h3>Receta creada Correctamente. ID: <a href={`/home/detail/${payloadstate}`} >{payloadstate}</a> </h3>
           : false}
 
-        <form onSubmit={handleOnSubmit}>
+        <form onSubmit={handleOnSubmit} >
           <div>
             <input type='text' name="title" value={form.title} placeholder="Title..." onChange={handleOnChange} onBlur={(e) => validate(e)} className={error.title ? 'warning' : undefined}></input><br />
             {error.title ? <span>{error.title}</span> : false}
@@ -185,8 +184,9 @@ export default function RecipeList() {
             {error.steps ? <span>{error.steps}</span> : false}
             <button onClick={AddFields} className={error.steps ? 'warning' : undefined}>+</button>
           </div>
+          {console.log(error.title)}
+          <input id='enviar' type="submit" disabled={(error.title || error.summary || error.steps) ? true : false} />
 
-          <input type="submit" />
         </form>
       </div>
     </div >

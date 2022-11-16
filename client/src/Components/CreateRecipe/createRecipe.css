@@ -105,3 +105,6 @@
 .createinputs h3 {
   color: rgb(149, 52, 61);
 }
+#enviar:disabled {
+  border: 2px solid rgb(238, 0, 0) !important;
+}

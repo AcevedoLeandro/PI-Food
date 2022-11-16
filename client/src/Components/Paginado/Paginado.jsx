@@ -14,13 +14,10 @@ export default function Paginado({ cantAllRecipes, cantRecipePerPage, pages }) {
             <ul className="paginado">
                 {pageNumber?.map(p =>
                     <li key={p}>
-                        <a id={p} href="#" onClick={() => pages(p)}>
-                            {p}
-                        </a>
+                        <button id={p} onClick={() => pages(p)}>{p}</button>
                     </li>
                 )}
             </ul>
-
         </div >
     )
 }

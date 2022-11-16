@@ -7,21 +7,21 @@
   display: inline;
 }
 
-.paginado li a {
+.paginado li button {
   color: black;
   float: left;
   padding: 8px 16px;
   text-decoration: none;
   border-radius: 5px;
+  border: 1px solid rgb(149, 52, 61, 0.3);
+  margin: 8px;
 }
 
-.paginado li a:focus {
+.paginado li button:hover {
   background-color: rgb(230, 164, 75);
-  color: black;
-  border-radius: 5px;
+  cursor: progress;
 }
 
-.paginado li a:hover {
-  background-color: rgb(124, 129, 125);
-  color: white;
+.paginado li button:focus {
+  background-color: rgb(230, 164, 75);
 }
