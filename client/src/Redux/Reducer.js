@@ -15,7 +15,8 @@ export default function reducer(state = initialState, action) {
                 ...state,
                 recipes: action.payload,
                 filteredRecipes: action.payload,
-                loading: false
+                loading: false,
+                error: {}
             }
         case GET_RECIPES_BY_TITLE:
             return {
@@ -34,6 +35,7 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 diets: action.payload,
+                loading: false
             }
 
         case ADD_RECIPE:
@@ -91,7 +93,8 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 error: action.payload,
-                loading: false
+                loading: false,
+
             }
 
         default:

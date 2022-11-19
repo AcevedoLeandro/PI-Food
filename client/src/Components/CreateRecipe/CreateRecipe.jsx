@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createRecipe, getDiets } from "../../Redux/Actions";
+import { Link } from "react-router-dom";
 import './createRecipe.css'
 
 
@@ -132,7 +133,7 @@ export default function RecipeList() {
 
     < div className="createContainer" >
       <div className='createinputs'>
-        {payloadstate ? <h3>Receta creada Correctamente. ID: <a href={`/home/detail/${payloadstate}`} >{payloadstate}</a> </h3>
+        {payloadstate ? <h3>Receta creada Correctamente. ID: <Link to={`/home/detail/${payloadstate}`}>{payloadstate}</Link> </h3>
           : false}
 
         <form onSubmit={handleOnSubmit} >
@@ -152,7 +153,8 @@ export default function RecipeList() {
             <input type='text' name="summary" value={form.summary} placeholder="Summary..." onChange={handleOnChange} onBlur={(e) => validate(e)} className={error.summary ? 'warning' : undefined} ></input><br />
             {error.summary ? <span>{error.summary}</span> : false}
           </div>
-          <div>
+          <div className="healthscore">
+            <label>Health Score</label>
             <input type='number' name="healthScore" value={form.healthScore} onChange={handleOnChange} onBlur={(e) => validate(e)} className={error.healthScore ? 'warning' : undefined}></input><br />
             {error.healthScore ? <span>{error.healthScore}</span> : false}
           </div>
@@ -184,7 +186,7 @@ export default function RecipeList() {
             {error.steps ? <span>{error.steps}</span> : false}
             <button onClick={AddFields} className={error.steps ? 'warning' : undefined}>+</button>
           </div>
-          {console.log(error.title)}
+
           <input id='enviar' type="submit" disabled={(error.title || error.summary || error.steps) ? true : false} />
 
         </form>

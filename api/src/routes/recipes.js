@@ -7,7 +7,7 @@ if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const imgDefault = 'https://cdn-icons-png.flaticon.com/512/85/85488.png'
 
 async function getDataApi(name) {
-    let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=4&addRecipeInformation=true`);
+    let { data } = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${process.env.API_KEY}&number=30&addRecipeInformation=true`);
     var apiResult
     let resultRecipes = []
 

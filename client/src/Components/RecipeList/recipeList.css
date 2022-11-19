@@ -40,3 +40,13 @@ li {
   background-color: #f0f0f0;
   color: rgb(166, 36, 49);
 }
+#home {
+  margin-top: 8px;
+  color: black;
+  text-decoration: none;
+  border-radius: 5px;
+  border: 1px solid rgb(149, 52, 61, 0.3);
+}
+#home:hover {
+  background-color: rgb(230, 164, 75);
+}

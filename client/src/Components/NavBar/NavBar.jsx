@@ -22,11 +22,12 @@ export default function NavBar() {
     dispatch(actions.loading())
   };
 
+
   return (
     <nav >
       <div className="navBar">
         <div>
-          <a href="/home"><img src={logo} alt="logo" width="150px" /></a>
+          <Link to="/home"><img src={logo} alt="logo" width="150px" /></Link>
         </div>
         <div className="searchAndCreate">
           <div className="search">

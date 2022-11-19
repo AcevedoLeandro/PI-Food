@@ -6,6 +6,7 @@ import { useState } from "react";
 import Paginado from "../Paginado/Paginado.jsx";
 import './recipeList.css'
 import imgLoading from '../../Assets/imgLoading.gif'
+import imgHome from '../../Assets/home.png'
 
 export default function RecipeList() {
   let dispatch = useDispatch();
@@ -15,6 +16,7 @@ export default function RecipeList() {
     dispatch(getDiets())
     dispatch(getAllRecipes());
   }, [dispatch]);
+
   const load = useSelector(state => state.loading)
   const error = useSelector(state => state.error)
   const order = useRef(null)
@@ -42,6 +44,12 @@ export default function RecipeList() {
     dispatch(orderRecipes(e.target.value))
     setRefresh(e.target.value)
   }
+
+  function recargar(e) {
+    e.preventDefault()
+    dispatch(loading())
+    dispatch(getAllRecipes())
+  }
   return (
     <>
       <div className="div.select">
@@ -64,7 +72,7 @@ export default function RecipeList() {
           </div>
         </div>
       </div>
-
+      <button id='home' onClick={recargar}><img src={imgHome} alt='home'></img></button>
       {!load ?
         !Object.entries(error).length > 0 ?
           <div>

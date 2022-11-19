@@ -108,3 +108,9 @@
 #enviar:disabled {
   border: 2px solid rgb(238, 0, 0) !important;
 }
+
+.healthscore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
