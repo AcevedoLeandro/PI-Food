@@ -2,6 +2,7 @@ import './App.css';
 import { Route, Switch } from "react-router-dom";
 import LandingPage from './Components/LandingPage/LandingPage.jsx'
 import Home from './Home.js'
+import Page404 from './Components/Page404/Page404';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path='/home'>
           <Home />
         </Route>
+        <Route path='*'> <Page404 /></Route>
       </Switch>
     </div>
   );

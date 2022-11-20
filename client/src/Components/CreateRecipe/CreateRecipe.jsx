@@ -81,12 +81,21 @@ export default function RecipeList() {
     field.type = "text"
     field.id = current
     field.name = "steps"
+    field.className = 'stepbystep'
     field.onchange = (e) => handleOnChangeSteps(e)
     divSteps.current.append(field)
     i.current++
     validateSteps()
   }
 
+  function eliminarSteps() {
+    let inputsToErase = document.getElementsByClassName('stepbystep')
+    let inputs = Array.from(inputsToErase)
+    for (let j = 0; j < inputs.length; j++) {
+      inputs[j].remove()
+    }
+    setError(prev => ({ ...prev, steps: true }))
+  }
 
   function handleOnSubmit(e) {
     e.preventDefault();
@@ -94,8 +103,10 @@ export default function RecipeList() {
     dispatch(createRecipe(formulario))
     setForm(initialstateForm)
     setSteps([])
+    eliminarSteps()
     dispatch(getDiets())
   }
+
 
   function validate(e) {
     switch (e.target.name) {

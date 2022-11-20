@@ -5,9 +5,6 @@ import CreateRecipe from './Components/CreateRecipe/CreateRecipe.jsx'
 import RecipeList from "./Components/RecipeList/RecipeList.jsx";
 import RecipeDetail from "./Components/RecipeDetail/RecipeDetail.jsx";
 
-
-
-
 export default function Home() {
 
     return (
@@ -20,7 +17,6 @@ export default function Home() {
                 <CreateRecipe />
             </Route>
             <Route exact path='/home/detail/:id' render={({ match }) => (<RecipeDetail match={match} />)}>
-
             </Route>
         </>
     );

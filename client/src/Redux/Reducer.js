@@ -16,7 +16,8 @@ export default function reducer(state = initialState, action) {
                 recipes: action.payload,
                 filteredRecipes: action.payload,
                 loading: false,
-                error: {}
+                error: {},
+                payload: null
             }
         case GET_RECIPES_BY_TITLE:
             return {
